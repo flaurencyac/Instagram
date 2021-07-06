@@ -1,8 +1,12 @@
 package com.example.instagram.activities;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.instagram.R;
+import com.example.instagram.fragments.ComposeFragment;
+import com.example.instagram.fragments.ProfileFragment;
+import com.example.instagram.fragments.TimelineFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,14 +29,44 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Find the toolbar view inside the activity layout
+        // Find the toolbar view inside the activity layout & set the Toolbar to act as ActionBar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        // Sets the Toolbar to act as the ActionBar for this Activity window.
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        // Define fragment and fragment manager
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final Fragment composeFragment = new ComposeFragment();
+        final Fragment timelineFragment = new TimelineFragment();
+        final Fragment profileFragment = new ProfileFragment();
 
+        // Find the bottom nav bar
+        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigationView);
+
+        // Set listener on bottom nav view and handle nav view item clicks
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment fragment;
+                switch(item.getItemId()) {
+                    case R.id.action_home:
+                        fragment = timelineFragment;
+                        break;
+                    case R.id.action_compose:
+                        fragment = composeFragment;
+                        break;
+                    case R.id.action_profile:
+                        fragment = profileFragment;
+                        break;
+                    default:
+                        return true;
+                }
+                fragmentManager.beginTransaction().replace(R.id.flFragment, fragment).commit();
+                return true;
+            }
+        });
+        // Set default selection
+        bottomNavigationView.setSelectedItemId(R.id.action_compose);
     }
 
     //------------TOOLBAR METHODS-------------------------------------------------------------//
@@ -58,6 +96,5 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    // TODO make a bottom navbar, viewpager, and fragments
     // TODO use selectors for icons
 }

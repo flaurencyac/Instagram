@@ -57,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
             // if request succeeds exception e should be null
             public void done(ParseUser user, ParseException e) {
                 if (e != null) {
-                    Log.e(TAG, "Issue with login", e);
+                    Log.e(TAG, "Issue with login"+e, e);
                 }
                 // navigate to the main activity if the user has signed in properly
                 goMainActivity();

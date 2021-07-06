@@ -47,4 +47,9 @@ dependencies {
     implementation 'com.github.parse-community.Parse-SDK-Android:parse:1.26.0'
     // for logging API calls to LogCat
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+    // for bottom navbar
+    implementation "androidx.appcompat:appcompat:${appCompatVersion}"
+    implementation "com.google.android.material:material:${designSupportVersion}"
+
+
 }
