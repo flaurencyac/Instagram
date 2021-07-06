@@ -16,5 +16,19 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
         <!-- Customize your theme here. -->
+        <!-- to prevent the dropdown in the menu from overlapping with the toolbar-->
+        <item name="overlapAnchor">false</item>
+        <item name="android:dropDownVerticalOffset">?attr/actionBarSize</item>
+    </style>
+    <!-- Toolbar theme -->
+    <style name="ToolbarTheme">
+        <!-- android:textColorPrimary is the color of the title text in the Toolbar  -->
+        <!--item name="android:textColorPrimary">@android:color/white</item> -->
+        <!-- actionMenuTextColor is the color of the text of action (menu) items  -->
+        <item name="actionMenuTextColor">@android:color/black</item>
+        <!-- these cause clicking icons to trigger a ripple effect -->
+        <item name="selectableItemBackground">?android:selectableItemBackground</item>
+        <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
+
     </style>
 </resources>
