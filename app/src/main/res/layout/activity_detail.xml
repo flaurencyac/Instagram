@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="0dp"
+    tools:context=".activities.DetailActivity">
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/ivProfileImage"-->
+    <!--        android:layout_width="50dp"-->
+    <!--        android:layout_height="50dp"-->
+    <!--        android:layout_alignParentStart="true"-->
+    <!--        android:layout_alignParentTop="true"-->
+    <!--        android:layout_marginStart="5dp"-->
+    <!--        android:layout_marginTop="5dp"-->
+    <!--        android:cropToPadding="false"-->
+    <!--        android:transitionName="profile"-->
+    <!--        tools:srcCompat="@tools:sample/avatars" />-->
+
+    <include
+        android:id="@+id/toolbar_main"
+        layout="@layout/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_main"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="0dp"
+        android:fontFamily="sans-serif-medium"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textStyle="bold"
+        tools:text="flaurencya" />
+
+    <ImageView
+        android:id="@+id/ivImage"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:layout_below="@+id/tvUsername"
+        android:layout_alignStart="@+id/tvUsername"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="3dp"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivImage"
+        android:layout_alignStart="@+id/ivImage"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="5dp"
+        android:fontFamily="sans-serif"
+        tools:text="flaurencya says hi!" />
+
+    <TextView
+        android:id="@+id/tvDateCreated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDescription"
+        android:layout_alignStart="@+id/tvDescription"
+        android:layout_alignParentEnd="false"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="289dp"
+        tools:text="July 04, 2021" />
+
+
+</RelativeLayout>

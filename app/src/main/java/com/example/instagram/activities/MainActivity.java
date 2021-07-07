@@ -8,12 +8,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.instagram.Post;
 import com.example.instagram.R;
 import com.example.instagram.fragments.ComposeFragment;
 import com.example.instagram.fragments.ProfileFragment;
@@ -21,8 +23,11 @@ import com.example.instagram.fragments.TimelineFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.ParseUser;
 
+import org.parceler.Parcels;
+
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    public static final int REQUEST_CODE_DETAILS = 42;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // Set default selection
-        bottomNavigationView.setSelectedItemId(R.id.action_compose);
+        bottomNavigationView.setSelectedItemId(R.id.action_home);
     }
 
     //------------TOOLBAR METHODS-------------------------------------------------------------//
@@ -96,5 +101,16 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    // TODO use selectors for icons
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        if (requestCode == REQUEST_CODE_DETAILS && resultCode == Activity.RESULT_OK) {
+//            Post post = Parcels.unwrap(data.getParcelableExtra("postObject"));
+//            int postPosition = data.getExtras().getInt("postPosition");
+//
+//            allPosts.set(postPosition, post);
+//            adapter.notifyItemChanged(postPosition);
+//            rvPosts.smoothScrollToPosition(postPosition);
+//        }
+//        super.onActivityResult(requestCode, resultCode, data);
+//    }
 }

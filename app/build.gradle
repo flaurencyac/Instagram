@@ -37,7 +37,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     // Glide v4 uses this new annotation processor -- see https://bumptech.github.io/glide/doc/generatedapi.html
-    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
     implementation 'com.google.android.material:material:1.3.0'
     //implementation 'jp.wasabeef:glide-transformations:4.1.0'
     // to use Parceler
@@ -50,6 +51,6 @@ dependencies {
     // for bottom navbar
     implementation "androidx.appcompat:appcompat:${appCompatVersion}"
     implementation "com.google.android.material:material:${designSupportVersion}"
-
-
+    // for swipe refresh layout
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 }
