@@ -1,7 +1,8 @@
 package com.example.instagram;
 
+import com.example.instagram.models.Post;
+
 import org.parceler.Parcel;
-import org.w3c.dom.Comment;
 
 @Parcel
 public class ParcelableObject {

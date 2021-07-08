@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,12 +16,17 @@ import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+
 
 public class LoginActivity extends AppCompatActivity {
     public static final String TAG = "LoginActivity";
     private EditText etUsername;
     private EditText etPassword;
     private Button btnLogin;
+    private Switch switchPasswordVisibility;
+    private Boolean showPassword;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,8 +37,10 @@ public class LoginActivity extends AppCompatActivity {
             goMainActivity();
         }
 
+        showPassword = false;
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
+        switchPasswordVisibility = findViewById(R.id.switchPasswordVisibility);
         btnLogin = findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -44,7 +52,19 @@ public class LoginActivity extends AppCompatActivity {
                 login(username, password);
             }
         });
-
+        switchPasswordVisibility.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "onClick password visibility switch");
+                if (showPassword == true) {
+                    etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    showPassword = false;
+                } else {
+                    etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    showPassword = true;
+                }
+            }
+        });
 
     }
 

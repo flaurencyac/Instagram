@@ -30,9 +30,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar_main"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_toEndOf="@+id/ivProfilePicture"
         android:fontFamily="sans-serif-medium"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textStyle="bold"
@@ -40,14 +40,12 @@
 
     <ImageView
         android:id="@+id/ivImage"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_below="@+id/tvUsername"
-        android:layout_alignStart="@+id/tvUsername"
+        android:layout_below="@+id/ivProfilePicture"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="9dp"
-        android:layout_marginEnd="3dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="0dp"
         android:scaleType="centerCrop"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -58,10 +56,12 @@
         android:layout_below="@+id/ivImage"
         android:layout_alignStart="@+id/ivImage"
         android:layout_alignParentBottom="false"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:fontFamily="sans-serif"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/black"
+        android:textSize="16sp"
         tools:text="flaurencya says hi!" />
 
     <TextView
@@ -72,9 +72,31 @@
         android:layout_alignStart="@+id/tvDescription"
         android:layout_alignParentEnd="false"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="289dp"
         tools:text="July 04, 2021" />
+
+    <ImageView
+        android:id="@+id/ivProfilePicture"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/toolbar_main"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@drawable/ic_baseline_account_circle_24" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvComments"
+        android:layout_width="412dp"
+        android:layout_height="176dp"
+        android:layout_below="@+id/tvDateCreated"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="1dp" />
 
 
 </RelativeLayout>

@@ -1,5 +1,10 @@
 package com.example.instagram.activities;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,79 +14,83 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.example.instagram.ParcelableObject;
-import com.example.instagram.adapters.CommentsAdapter;
-import com.example.instagram.models.Comment;
 import com.example.instagram.models.Post;
 import com.example.instagram.R;
+import com.example.instagram.adapters.PictureAdapter;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class DetailActivity extends AppCompatActivity {
-    private static final String TAG = "DetailActivity";
+public class ProfileActivity extends AppCompatActivity {
+    private static final String TAG = "ProfileActivity";
+    public static final Integer NUMBEROFCOLUMNS = 3;
 
     private Post post;
     private Context context;
-    private TextView tvUsername;
-    private ImageView ivImage;
-    private TextView tvDateCreated;
-    private TextView tvDescription;
     private ImageView ivProfilePicture;
-    private RecyclerView rvComments;
-    private List<Comment> comments;
-    private CommentsAdapter commentsAdapter;
+    private TextView tvUsername;
+    private RecyclerView rvPictures;
+    private List<Post> userPosts;
+    private PictureAdapter picsAdapter;
 
-    /*
-    Sring commentHere =etComment.getText()sdkfa;
-    comment.put(jsdlf)
-
-    Intent sendBack = new Intent();
-    sendBack.putExtra("comment", commentHere);
-
-     */
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_profile);
         this.context = this;
-        tvUsername = findViewById(R.id.tvUsername);
-        tvDescription = findViewById(R.id.tvDescription);
-        tvDateCreated = findViewById(R.id.tvDateCreated);
-        ivImage = findViewById(R.id.ivImage);
-        ivProfilePicture = findViewById(R.id.ivProfilePicture);
-        rvComments = findViewById(R.id.rvComments);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         ParcelableObject receivedParcel = Parcels.unwrap(getIntent().getParcelableExtra("postObject"));
         post = receivedParcel.getPost();
 
+        tvUsername = findViewById(R.id.tvUsername);
+        ivProfilePicture = findViewById(R.id.ivProfilePicture);
+        rvPictures = findViewById(R.id.rvPictures);
         tvUsername.setText(post.getUser().getUsername());
-        tvDescription.setText(post.getDescription());
-        tvDateCreated.setText(Post.dateToString(post.getCreatedAt()));
-        ParseFile image = post.getImage();
-        if (image != null) {
-            Glide.with(context).load(post.getImage().getUrl()).into(ivImage);
-        }
         ParseFile profilePicture = (ParseFile) post.getUser().get("profilePicture");
         if (profilePicture != null) {
             Glide.with(context).load(profilePicture.getUrl()).circleCrop().into(ivProfilePicture);
         }
+        userPosts = new ArrayList<>();
+        picsAdapter = new PictureAdapter(context, userPosts);
+        rvPictures.setAdapter(picsAdapter);
+        rvPictures.setLayoutManager(new GridLayoutManager(context, NUMBEROFCOLUMNS));
+        // get all posts that the user created
+        queryPosts();
+
     }
 
-    //------------TOOLBAR METHODS-------------------------------------------------------------//
+    private void queryPosts() {
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.include(Post.KEY_USER);
+        query.whereEqualTo(Post.KEY_USER, post.getUser());
+        query.addDescendingOrder("createdAt");
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts", e);
+                    return;
+                }
+                for (Post post : posts) {
+                    Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
+                }
+                userPosts.addAll(posts);
+                picsAdapter.notifyDataSetChanged();
+            }
+        });
+    }
 
     // Menu icons are inflated just as they were with actionbar
     @Override
@@ -106,6 +115,4 @@ public class DetailActivity extends AppCompatActivity {
         }
         return true;
     }
-
-
 }

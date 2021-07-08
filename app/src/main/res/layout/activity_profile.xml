@@ -5,26 +5,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ProfileFragment">
+    tools:context=".activities.ProfileActivity">
+
+    <include
+        android:id="@+id/toolbar_main"
+        layout="@layout/toolbar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPictures"
         android:layout_width="match_parent"
-        android:layout_height="538dp"
+        android:layout_height="461dp"
+        android:layout_below="@+id/ivProfilePicture"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="121dp" />
+        android:layout_marginTop="5dp" />
 
     <TextView
         android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar_main"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="123dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="102dp"
+        android:layout_marginTop="34dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         tools:text="Username" />
 
@@ -32,23 +38,12 @@
         android:id="@+id/ivProfilePicture"
         android:layout_width="81dp"
         android:layout_height="97dp"
+        android:layout_below="@+id/toolbar_main"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="11dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="0dp"
         android:scaleType="centerCrop"
         tools:src="@tools:sample/avatars"
         tools:srcCompat="@drawable/ic_baseline_account_circle_24" />
 
-    <Button
-        android:id="@+id/btnUpdateProfilePic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="122dp"
-        android:layout_marginTop="56dp"
-        android:backgroundTint="@color/colorInstaMaroon"
-        android:text="Update Profile Picture"
-        android:textSize="10sp" />
 </RelativeLayout>

@@ -1,6 +1,5 @@
 package com.example.instagram.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,31 +9,34 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.instagram.Post;
-import com.example.instagram.PostsAdapter;
+import com.example.instagram.EndlessRecyclerViewScrollListener;
+import com.example.instagram.models.Post;
+import com.example.instagram.adapters.PostsAdapter;
 import com.example.instagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
-import org.parceler.Parcels;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import android.app.Activity;
+import java.util.Date;
 
 public class TimelineFragment extends Fragment {
     public static final String TAG = "TimelineFragment";
+    public static final Integer CODE_QUERY_POSTS_NORMALLY = 0;
+    public static final Integer CODE_QUERY_MORE_POSTS = 1;
 
     private RecyclerView rvPosts;
     private List<Post> allPosts;
     private PostsAdapter adapter;
     private SwipeRefreshLayout swipeContainer;
+    private EndlessRecyclerViewScrollListener scrollListener;
+    private Date oldestPostDate;
 
     public TimelineFragment() {}
 
@@ -45,12 +47,30 @@ public class TimelineFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        rvPosts = view.findViewById(R.id.rvPosts);
+        allPosts = new ArrayList<>();
+        adapter = new PostsAdapter(getContext(), allPosts);
+        rvPosts.setAdapter(adapter);
+        LinearLayoutManager llm = new LinearLayoutManager(getContext());
+//        llm.setReverseLayout(true);
+//        llm.setStackFromEnd(true);
+        rvPosts.setLayoutManager(llm);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvPosts.getContext(), DividerItemDecoration.VERTICAL);
+        rvPosts.addItemDecoration(dividerItemDecoration);
+        scrollListener = new EndlessRecyclerViewScrollListener(llm) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                queryPosts(CODE_QUERY_MORE_POSTS);
+            }
+        };
+        rvPosts.addOnScrollListener(scrollListener);
         swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 adapter.clear();
-                queryPosts();
+                queryPosts(CODE_QUERY_POSTS_NORMALLY);
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -58,37 +78,45 @@ public class TimelineFragment extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-        rvPosts = view.findViewById(R.id.rvPosts);
-        // Steps to use the recycler view:
-        // 0. Create the layout for one row in the list
-        // 1. create the adapter, data source
-        allPosts = new ArrayList<>();
-        adapter = new PostsAdapter(getContext(), allPosts);
-        // 2. Set the adapter and linear layout manager on the recycler view
-        rvPosts.setAdapter(adapter);
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        llm.setReverseLayout(true);
-        llm.setStackFromEnd(true);
-        rvPosts.setLayoutManager(llm);
-        queryPosts();
+        queryPosts(CODE_QUERY_POSTS_NORMALLY);
     }
 
-    private void queryPosts() {
+    protected void queryPosts(Integer codedRequestType) {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
+        if (codedRequestType == CODE_QUERY_MORE_POSTS) {
+            query.setLimit(3);
+            query.whereLessThan("createdAt", oldestPostDate);
+        }
+        else if (codedRequestType == CODE_QUERY_POSTS_NORMALLY) {
+            query.setLimit(5);
+        }
+        query.addDescendingOrder("createdAt");
         query.findInBackground(new FindCallback<Post>() {
             @Override
             public void done(List<Post> posts, ParseException e) {
                 if (e != null) {
-                    Log.e(TAG, "Issue with getting posts"+e, e);
+                    Log.e(TAG, "Issue with getting posts", e);
                     return;
                 }
                 for (Post post : posts) {
                     Log.i(TAG, "Post: " + post.getDescription() + ", username: " + post.getUser().getUsername());
                 }
+                int numOldPosts = adapter.getItemCount();
                 allPosts.addAll(posts);
-                adapter.notifyDataSetChanged();
+                if (codedRequestType == CODE_QUERY_MORE_POSTS) {
+                    adapter.notifyItemRangeInserted(numOldPosts-1, allPosts.size()-numOldPosts);
+                    scrollListener.resetState();
+                } else {
+                    adapter.notifyDataSetChanged();
+                }
+                setOldestDate();
             }
         });
+    }
+
+    private void setOldestDate() {
+        int lastPostIndex = adapter.getItemCount()-1;
+        oldestPostDate = allPosts.get(lastPostIndex).getCreatedAt();
     }
 }

@@ -22,21 +22,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.instagram.Post;
+import com.example.instagram.models.Post;
 import com.example.instagram.R;
-import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.SaveCallback;
-import com.example.instagram.activities.MainActivity;
 import com.parse.ParseUser;
 
-import android.app.Activity;
-
 import java.io.File;
-import java.util.List;
 
 public class ComposeFragment extends Fragment {
     public static final String TAG = "ComposeFragment";
@@ -46,7 +39,7 @@ public class ComposeFragment extends Fragment {
     private ImageView ivPostImage;
     private Button btnSubmit;
     private File photoFile;
-    public String photoFileName = "photo.jpg";
+    public static String photoFileName = "photo.jpg";
 
     // Required empty public constructor
     public ComposeFragment() {

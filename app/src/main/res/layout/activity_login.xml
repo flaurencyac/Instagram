@@ -9,35 +9,36 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="282dp"
-        android:layout_height="118dp"
+        android:layout_width="200dp"
+        android:layout_height="80dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="120dp"
         app:srcCompat="@drawable/nux_dayone_landing_logo" />
 
     <EditText
         android:id="@+id/etUsername"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="230dp"
+        android:layout_marginTop="15dp"
         android:backgroundTint="#FFFFFF"
         android:ems="10"
         android:fadingEdge="none"
         android:hint="Username"
+
         android:inputType="textPersonName"
         android:textColor="#FFFFFF"
         tools:text="Username" />
 
     <EditText
         android:id="@+id/etPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/etUsername"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="289dp"
+        android:layout_marginTop="15dp"
         android:backgroundTint="#FFFFFF"
         android:ems="10"
         android:hint="password"
@@ -46,13 +47,22 @@
 
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/etPassword"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="233dp"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/colorInstaMaroon"
         android:elevation="20dp"
         android:text="Log In" />
+
+    <Switch
+        android:id="@+id/switchPasswordVisibility"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="282dp"
+        android:layout_marginEnd="52dp" />
 
 </RelativeLayout>

@@ -1,4 +1,4 @@
-package com.example.instagram;
+package com.example.instagram.models;
 
 import android.util.Log;
 
@@ -6,6 +6,8 @@ import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @ParseClassName("Post")
@@ -18,9 +20,7 @@ public class Post extends ParseObject {
         return getString(KEY_DESCRIPTION);
     }
 
-    public void setDescription(String description) {
-        put(KEY_DESCRIPTION, description);
-    }
+    public void setDescription(String description) { put(KEY_DESCRIPTION, description); }
 
     public ParseFile getImage() {
         return getParseFile(KEY_IMAGE);
@@ -39,6 +39,13 @@ public class Post extends ParseObject {
     public ParseFile getMedia() { return getParseFile("media"); }
 
     public void setMedia(ParseFile parseFile) {put("media", parseFile); }
+
+    public static String dateToString(Date createdAt) {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        String formatted = simpleDateFormat.format( createdAt);
+        return formatted;
+    }
 
     public static String calculateTimeAgo(Date createdAt) {
         int SECOND_MILLIS = 1000;
