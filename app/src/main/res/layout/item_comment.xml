@@ -17,12 +17,23 @@
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/tvComment"
+        android:id="@+id/tvUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
-        tools:text="my comment" />
+        tools:text="username" />
+
+    <TextView
+        android:id="@+id/tvCommentary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUsername"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_toEndOf="@+id/ivProfilePicture"
+        tools:text="my commentary here" />
 </RelativeLayout>

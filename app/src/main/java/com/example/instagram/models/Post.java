@@ -36,6 +36,7 @@ public class Post extends ParseObject {
 
     public void setUser(ParseUser user) { put(KEY_USER, user); }
 
+
     public ParseFile getMedia() { return getParseFile("media"); }
 
     public void setMedia(ParseFile parseFile) {put("media", parseFile); }

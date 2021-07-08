@@ -53,4 +53,6 @@ dependencies {
     implementation "com.google.android.material:material:${designSupportVersion}"
     // for swipe refresh layout
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0'
+
 }

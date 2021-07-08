@@ -7,23 +7,23 @@
     android:layout_margin="0dp"
     tools:context=".activities.DetailActivity">
 
-    <!--    <ImageView-->
-    <!--        android:id="@+id/ivProfileImage"-->
-    <!--        android:layout_width="50dp"-->
-    <!--        android:layout_height="50dp"-->
-    <!--        android:layout_alignParentStart="true"-->
-    <!--        android:layout_alignParentTop="true"-->
-    <!--        android:layout_marginStart="5dp"-->
-    <!--        android:layout_marginTop="5dp"-->
-    <!--        android:cropToPadding="false"-->
-    <!--        android:transitionName="profile"-->
-    <!--        tools:srcCompat="@tools:sample/avatars" />-->
-
     <include
         android:id="@+id/toolbar_main"
         layout="@layout/toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/colorInstaMaroon"
+        android:src="@drawable/ic_baseline_add_comment_24"
+        app:fabSize="normal" />
 
     <TextView
         android:id="@+id/tvUsername"
