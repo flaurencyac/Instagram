@@ -71,6 +71,8 @@ public class ProfileFragment extends Fragment {
         ParseFile profilePicture = (ParseFile) ParseUser.getCurrentUser().get("profilePicture");
         if (profilePicture != null) {
             Glide.with(getContext()).load(profilePicture.getUrl()).circleCrop().into(ivProfilePicture);
+        } else {
+            Glide.with(getContext()).load(R.drawable.ic_baseline_account_circle_24).circleCrop().into(ivProfilePicture);
         }
 
         btnUpdateProfilePic.setOnClickListener(new View.OnClickListener() {
@@ -145,8 +147,8 @@ public class ProfileFragment extends Fragment {
         if ((data != null) && requestCode == PICK_PHOTO_CODE) {
             Uri photoUri = data.getData();
             bitmap = loadFromUri(photoUri);
-            ivProfilePicture.setImageBitmap(bitmap);
-            //Glide.with(getContext()).asBitmap().load(bitmap).circleCrop().into(ivProfilePicture);
+            //ivProfilePicture.setImageBitmap(bitmap);
+            Glide.with(getContext()).asBitmap().load(bitmap).circleCrop().into(ivProfilePicture);
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 40, stream);
             byte[] byteArray = stream.toByteArray();
