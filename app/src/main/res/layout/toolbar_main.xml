@@ -27,8 +27,8 @@
             app:srcCompat="@drawable/nav_logo_whiteout" />
 
 
-
     </androidx.appcompat.widget.Toolbar>
+
 
 
 

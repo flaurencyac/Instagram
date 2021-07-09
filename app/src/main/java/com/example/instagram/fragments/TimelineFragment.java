@@ -1,6 +1,10 @@
 package com.example.instagram.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +19,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.instagram.EndlessRecyclerViewScrollListener;
+import com.example.instagram.ParcelableObject;
 import com.example.instagram.models.Post;
 import com.example.instagram.adapters.PostsAdapter;
 import com.example.instagram.R;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +37,7 @@ public class TimelineFragment extends Fragment {
     public static final String TAG = "TimelineFragment";
     public static final Integer CODE_QUERY_POSTS_NORMALLY = 0;
     public static final Integer CODE_QUERY_MORE_POSTS = 1;
+    private final int REQUEST_CODE_FAVORITE = 7;
 
     private RecyclerView rvPosts;
     private List<Post> allPosts;
@@ -53,8 +61,6 @@ public class TimelineFragment extends Fragment {
         adapter = new PostsAdapter(getContext(), allPosts);
         rvPosts.setAdapter(adapter);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
-//        llm.setReverseLayout(true);
-//        llm.setStackFromEnd(true);
         rvPosts.setLayoutManager(llm);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(rvPosts.getContext(), DividerItemDecoration.VERTICAL);
         rvPosts.addItemDecoration(dividerItemDecoration);
@@ -79,6 +85,18 @@ public class TimelineFragment extends Fragment {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
         queryPosts(CODE_QUERY_POSTS_NORMALLY);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_CODE_FAVORITE && resultCode == Activity.RESULT_OK) {
+            ParcelableObject receivedParcel = Parcels.unwrap(data.getParcelableExtra("postObject"));
+            Post post = receivedParcel.getPost();
+            Integer postPosition = data.getExtras().getInt("postPosition");
+            allPosts.set(postPosition, post);
+            adapter.notifyItemChanged(postPosition);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     protected void queryPosts(Integer codedRequestType) {

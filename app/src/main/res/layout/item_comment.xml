@@ -24,6 +24,8 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
+        android:fontFamily="sans-serif-black"
+        android:textColor="@color/black"
         tools:text="username" />
 
     <TextView
@@ -35,5 +37,6 @@
         android:layout_marginTop="2dp"
         android:layout_marginBottom="2dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
+        android:textColor="@color/black"
         tools:text="my commentary here" />
 </RelativeLayout>

@@ -31,10 +31,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar_main"
         android:layout_marginStart="6dp"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="7dp"
         android:layout_toEndOf="@+id/ivProfilePicture"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="sans-serif"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textColor="@color/black"
         android:textStyle="bold"
         tools:text="flaurencya" />
 
@@ -53,13 +54,13 @@
         android:id="@+id/tvDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivImage"
+        android:layout_below="@+id/ivHeart"
         android:layout_alignStart="@+id/ivImage"
         android:layout_alignParentBottom="false"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="2dp"
         android:layout_marginBottom="5dp"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="sans-serif-light"
         android:textColor="@color/black"
         android:textSize="16sp"
         tools:text="flaurencya says hi!" />
@@ -68,12 +69,10 @@
         android:id="@+id/tvDateCreated"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvDescription"
-        android:layout_alignStart="@+id/tvDescription"
-        android:layout_alignParentEnd="false"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="289dp"
+        android:layout_below="@+id/ivImage"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="9dp"
         tools:text="July 04, 2021" />
 
     <ImageView
@@ -90,13 +89,49 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvComments"
         android:layout_width="412dp"
-        android:layout_height="176dp"
-        android:layout_below="@+id/tvDateCreated"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/divider2"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentBottom="false"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginBottom="1dp" />
+        android:layout_marginTop="0dp" />
+
+    <ImageView
+        android:id="@+id/ivHeart"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_below="@+id/ivImage"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="0dp"
+        android:background="#FFFFFF"
+        app:srcCompat="@drawable/ufi_heart" />
+
+    <TextView
+        android:id="@+id/tvLikeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivImage"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="8dp"
+        android:layout_toEndOf="@+id/ivHeart"
+        android:text="0 Likes"
+        tools:text="0 Likes" />
+
+    <View
+        android:id="@+id/divider2"
+        android:backgroundTint="@color/colorInstaMaroon"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_below="@+id/tvDescription"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="false"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:background="?android:attr/listDivider" />
 
 
 </RelativeLayout>

@@ -12,47 +12,51 @@
         android:id="@+id/etDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:ems="10"
         android:hint="Write your caption here..." />
 
     <Button
         android:id="@+id/btnCaptureImage"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etDescription"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="69dp"
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="70dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="18dp"
         android:backgroundTint="@color/colorInstaMaroon"
         android:text="Take Picture" />
 
     <ImageView
         android:id="@+id/ivPostImage"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="200dp"
         android:layout_below="@+id/btnCaptureImage"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="false"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="6dp"
         android:layout_marginBottom="0dp"
+        android:scaleType="fitCenter"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/btnSubmit"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorInstaMaroon"
         android:layout_below="@+id/ivPostImage"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="57dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="53dp"
+        android:backgroundTint="@color/colorInstaMaroon"
         android:text="Submit" />
 
 

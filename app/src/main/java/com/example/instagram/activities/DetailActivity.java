@@ -3,6 +3,7 @@ package com.example.instagram.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,12 +22,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.instagram.ParcelableObject;
 import com.example.instagram.adapters.CommentsAdapter;
+import com.example.instagram.adapters.PostsAdapter;
 import com.example.instagram.fragments.ComposeCommentFragment;
+import com.example.instagram.fragments.TimelineFragment;
 import com.example.instagram.models.Comment;
+import com.example.instagram.models.Like;
 import com.example.instagram.models.Post;
 import com.example.instagram.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -49,19 +54,13 @@ public class DetailActivity extends AppCompatActivity  implements ComposeComment
     private TextView tvDateCreated;
     private TextView tvDescription;
     private ImageView ivProfilePicture;
+    private ImageView ivHeart;
+    private TextView tvLikeCount;
     private RecyclerView rvComments;
     private List<Comment> comments;
     private CommentsAdapter commentsAdapter;
     private FloatingActionButton fab;
-
-    /*
-    Sring commentHere =etComment.getText()sdkfa;
-    comment.put(jsdlf)
-
-    Intent sendBack = new Intent();
-    sendBack.putExtra("comment", commentHere);
-
-     */
+    private Integer postPosition;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,36 +72,44 @@ public class DetailActivity extends AppCompatActivity  implements ComposeComment
         tvDateCreated = findViewById(R.id.tvDateCreated);
         ivImage = findViewById(R.id.ivImage);
         ivProfilePicture = findViewById(R.id.ivProfilePicture);
+        tvLikeCount = findViewById(R.id.tvLikeCount);
+        ivHeart = findViewById(R.id.ivHeart);
         rvComments = findViewById(R.id.rvComments);
         comments = new ArrayList<>();
         fab = findViewById(R.id.fabComment);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO start a fragment for composing the comment
+                // start a dialog fragment for composing the comment
                 showComposeDialog();
-//                Intent intent = new Intent(context, ComposeActivity.class);
-//                startActivityForResult(intent, REQUEST_CODE_COMMENT);
             }
         });
 
-        // Create adapter passing in the sample user data
+        // set up recycler view, adapter, and linear layout manager
         commentsAdapter = new CommentsAdapter(context, comments);
-        // Attach the adapter to the recyclerview to populate items
         rvComments.setAdapter(commentsAdapter);
-        // Set layout manager to position the items
         rvComments.setLayoutManager(new LinearLayoutManager(this));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        // Unwrap parcel to get post and post position in the adapter
         ParcelableObject receivedParcel = Parcels.unwrap(getIntent().getParcelableExtra("postObject"));
         post = receivedParcel.getPost();
+        postPosition = getIntent().getExtras().getInt("postPosition");
 
+        // Define vars
         tvUsername.setText(post.getUser().getUsername());
-        tvDescription.setText(post.getDescription());
+        tvDescription.setText(Html.fromHtml("<b>" + post.getUser().getUsername() + "</b> " + post.getDescription()));
         tvDateCreated.setText(Post.dateToString(post.getCreatedAt()));
+        tvLikeCount.setText(""+ post.getLikeCount()+ " Likes");
+        PostsAdapter.queryLikes(post);
+        if (post.getLikeStatus()) {
+            ivHeart.setImageResource(R.drawable.ufi_heart_active);
+        } else {
+            ivHeart.setImageResource(R.drawable.ufi_heart);
+        }
         ParseFile image = post.getImage();
         if (image != null) {
             Glide.with(context).load(post.getImage().getUrl()).into(ivImage);
@@ -110,9 +117,60 @@ public class DetailActivity extends AppCompatActivity  implements ComposeComment
         ParseFile profilePicture = (ParseFile) post.getUser().get("profilePicture");
         if (profilePicture != null) {
             Glide.with(context).load(profilePicture.getUrl()).circleCrop().into(ivProfilePicture);
+        } else {
+            Glide.with(context).load(R.drawable.ic_baseline_account_circle_24).circleCrop().into(ivProfilePicture);
         }
+        // set any on click listener
+        ivHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                likeOrUnlike(post);
+            }
+        });
 
         queryComments();
+    }
+
+    private void likeOrUnlike(Post post) {
+        int oldLikeCount = post.getLikeCount();
+        if (post.getLikeStatus()) {
+            //delete the like object from the parse server
+            Like.destroyLike(post);
+            post.dislike();
+            ivHeart.setImageResource(R.drawable.ufi_heart);
+            post.put("likes", oldLikeCount - 1);
+            tvLikeCount.setText("" + (oldLikeCount - 1) + " Likes");
+            post.setLikeCount(oldLikeCount-1);
+        }
+        else { // create and save a like object to the parse server
+            Like like = new Like();
+            like.setLikeParentPost(post);
+            like.setLiker(ParseUser.getCurrentUser());
+            like.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e!= null) {
+                        Log.e(TAG, "Error saving like object", e);
+                        Toast.makeText(context, "Error saving like", Toast.LENGTH_LONG).show();
+                    }
+                    Log.i(TAG, "Like was a success");
+                }
+            });
+            post.like();
+            ivHeart.setImageResource(R.drawable.ufi_heart_active);
+            post.put("likes", oldLikeCount + 1);
+            tvLikeCount.setText("" + (oldLikeCount + 1) + " Likes");
+            post.setLikeCount(oldLikeCount+1);
+        }
+        // set new like count in parse server
+        post.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.e(TAG, "Error setting new like count", e);
+                }
+            }
+        });
     }
 
     // get list of comments that belong to a post
@@ -145,7 +203,6 @@ public class DetailActivity extends AppCompatActivity  implements ComposeComment
 
     @Override
     public void onFinishComposeDialog(String inputText) {
-        // make a comment out of this inputText
         Comment comment = new Comment();
         comment.setCommentary(inputText);
         comment.setCommenter(ParseUser.getCurrentUser());
@@ -158,10 +215,21 @@ public class DetailActivity extends AppCompatActivity  implements ComposeComment
                     Log.e(TAG, "Error while saving comment", e);
                 }
                 Log.i(TAG, "Saving comment to Parse was a success");
-                // update the recycler view
                 queryComments();
             }
         });
+    }
+
+    // send an intent with the post position to be updated in the recycler view
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(DetailActivity.this, TimelineFragment.class);
+        ParcelableObject parcel = new ParcelableObject();
+        parcel.setPost(post);
+        intent.putExtra("post", post);
+        intent.putExtra("postPosition", postPosition);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     //------------TOOLBAR METHODS-------------------------------------------------------------//
@@ -189,6 +257,4 @@ public class DetailActivity extends AppCompatActivity  implements ComposeComment
         }
         return true;
     }
-
-
 }

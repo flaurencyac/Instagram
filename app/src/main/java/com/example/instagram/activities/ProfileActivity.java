@@ -61,6 +61,8 @@ public class ProfileActivity extends AppCompatActivity {
         ParseFile profilePicture = (ParseFile) post.getUser().get("profilePicture");
         if (profilePicture != null) {
             Glide.with(context).load(profilePicture.getUrl()).circleCrop().into(ivProfilePicture);
+        } else {
+            Glide.with(context).load(R.drawable.ic_baseline_account_circle_24).circleCrop().into(ivProfilePicture);
         }
         userPosts = new ArrayList<>();
         picsAdapter = new PictureAdapter(context, userPosts);
