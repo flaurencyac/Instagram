@@ -15,6 +15,7 @@ import com.example.instagram.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private Switch switchPasswordVisibility;
     private Boolean showPassword;
+    private Button btnSignup;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         showPassword = false;
+        btnSignup = findViewById(R.id.btnSignup);
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         switchPasswordVisibility = findViewById(R.id.switchPasswordVisibility);
@@ -50,6 +53,30 @@ public class LoginActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString();
                 // method to login the user
                 login(username, password);
+            }
+        });
+        btnSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create the ParseUser
+                ParseUser user = new ParseUser();
+                String username = etUsername.getText().toString();
+                String password = etPassword.getText().toString();
+                // Set core properties
+                user.setUsername(username);
+                user.setPassword(password);
+                // Set custom properties
+                user.put("username", username);
+                user.put("password", password);
+                user.signUpInBackground(new SignUpCallback() {
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            login(username, password);
+                        } else {
+                            Log.e(TAG, "Unable to sign up user", e);
+                        }
+                    }
+                });
             }
         });
         switchPasswordVisibility.setOnClickListener(new View.OnClickListener() {
